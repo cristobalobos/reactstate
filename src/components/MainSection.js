@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Footer from "./Footer";
 import VisibleBookList from "../containers/VisibleBookList";
+import { BookProvider } from "../context/BookContext";
 
 import classicBooks from "../constants/books";
 
@@ -9,8 +10,9 @@ class MainSection extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      books: classicBooks,
+      books: [],
       completedBooks: 0,
+      showAuthors: true,
     };
     this.updateBookStatus = this.updateBookStatus.bind(this);
   }
@@ -39,17 +41,28 @@ class MainSection extends Component {
 
   render() {
     return (
-      <section className="main">
-        <VisibleBookList
-          books={this.state.books}
-          updateBookStatus={this.updateBookStatus}
-        />
-        <Footer
-          completedCount={this.state.completedBooks}
-          activeCount={this.state.books.length - this.state.completedBooks}
-          onClearCompleted={this.props.actions.clearCompleted}
-        />
-      </section>
+      <BookProvider value={{ showAuthors: this.state.showAuthors }}>
+        <section className="main">
+          <button
+            onClick={() =>
+              this.setState({ showAuthors: !this.state.showAuthors })
+            }
+            style={{ textSize: "14px", margin: "5px", color: "blue" }}
+          >
+            {" "}
+            Toggle authors{" "}
+          </button>
+          <VisibleBookList
+            books={this.state.books}
+            updateBookStatus={this.updateBookStatus}
+          />
+          <Footer
+            completedCount={this.state.completedBooks}
+            activeCount={this.state.books.length - this.state.completedBooks}
+            onClearCompleted={this.props.actions.clearCompleted}
+          />
+        </section>
+      </BookProvider>
     );
   }
 }
