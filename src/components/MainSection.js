@@ -43,6 +43,11 @@ class MainSection extends Component {
     return (
       <BookProvider value={{ showAuthors: this.state.showAuthors }}>
         <section className="main">
+          <Footer
+            completedCount={this.state.completedBooks}
+            activeCount={this.state.books.length - this.state.completedBooks}
+            onClearCompleted={this.props.actions.clearCompleted}
+          />
           <button
             onClick={() =>
               this.setState({ showAuthors: !this.state.showAuthors })
@@ -55,11 +60,6 @@ class MainSection extends Component {
           <VisibleBookList
             books={this.state.books}
             updateBookStatus={this.updateBookStatus}
-          />
-          <Footer
-            completedCount={this.state.completedBooks}
-            activeCount={this.state.books.length - this.state.completedBooks}
-            onClearCompleted={this.props.actions.clearCompleted}
           />
         </section>
       </BookProvider>
